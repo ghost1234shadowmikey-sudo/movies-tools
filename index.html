@@ -8,20 +8,49 @@
         html, body {
             height: 100%;
             margin: 0;
+            padding: 0;
             font-family: 'Inter', sans-serif;
             background: #000;
             color: white;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
         }
 
-        body { background: radial-gradient(circle, #1a1a1a 0%, #000 100%); }
+        body { background: radial-gradient(circle at top, #1a1a1a 0%, #000 100%); }
+
+        /* --- Top Navigation --- */
+        .header-nav {
+            width: 90%;
+            max-width: 900px;
+            display: flex;
+            justify-content: flex-start;
+            padding-top: 30px;
+        }
+
+        .back-home-link {
+            text-decoration: none;
+            color: #ffffff;
+            font-weight: 800;
+            font-size: 12px;
+            text-transform: uppercase;
+            padding: 8px 15px;
+            border: 1px solid #ffffff;
+            border-radius: 20px;
+            transition: 0.3s;
+            opacity: 0.6;
+        }
+
+        .back-home-link:hover {
+            opacity: 1;
+            background: #ffffff;
+            color: #000;
+        }
 
         .wrapper {
             width: 100%;
             max-width: 900px;
-            padding: 40px 20px;
+            padding: 20px;
             text-align: center;
         }
 
@@ -55,16 +84,20 @@
 
         /* Tools Blue Theme */
         .tools-col { background: rgba(20, 30, 40, 0.5); border: 1px solid rgba(52, 152, 219, 0.3); }
-        .tools-btn { background: #2980b9; color: white; border: none; padding: 16px; font-weight: 900; border-radius: 12px; cursor: pointer; text-transform: uppercase; transition: 0.3s; }
+        .tools-btn { background: #2980b9; color: white; border: none; padding: 16px; font-weight: 900; border-radius: 12px; cursor: pointer; text-transform: uppercase; transition: 0.3s; text-decoration: none; display: block; }
         .tools-btn:hover { background: #3498db; box-shadow: 0 0 20px rgba(52, 152, 219, 0.4); }
 
         /* Movies Red Theme */
         .movies-col { background: rgba(60, 10, 10, 0.4); border: 1px solid rgba(231, 76, 60, 0.3); }
-        .movie-btn { background: #c0392b; color: white; border: none; padding: 16px; font-weight: 900; border-radius: 12px; cursor: pointer; text-transform: uppercase; transition: 0.3s; }
+        .movie-btn { background: #c0392b; color: white; border: none; padding: 16px; font-weight: 900; border-radius: 12px; cursor: pointer; text-transform: uppercase; transition: 0.3s; text-decoration: none; display: block; }
         .movie-btn:hover { background: #e74c3c; box-shadow: 0 0 20px rgba(231, 76, 60, 0.4); }
     </style>
 </head>
 <body>
+
+    <div class="header-nav">
+        <a href="https://realhome-74e.pages.dev/" class="back-home-link">← Home</a>
+    </div>
 
     <div class="wrapper">
         <h1 class="main-header">Tools & Movies</h1>
@@ -72,34 +105,69 @@
             
             <div class="column tools-col">
                 <h2 style="color: #3498db; margin-bottom: 15px;">Tools</h2>
-                <button class="tools-btn" onclick="window.open('https://nitter.net/', '_blank')">Twitter Viewer/Searcher</button>
-                <button class="tools-btn" onclick="window.open('https://inv.nadeko.net/', '_blank')">Invidous(Youtube Viewer, No Shorts)</button>
+                <button class="tools-btn" onclick="launch('Twitter Viewer', 'https://nitter.net/')">Twitter Viewer</button>
+                <button class="tools-btn" onclick="launch('Invidious', 'https://inv.nadeko.net/')">Invidious (No Shorts)</button>
                 <button class="tools-btn" onclick="launch('GitHub Viewer', 'https://schoolissuperfun.github.io/GitHub-Repository-Search/')">GitHub Alt Viewer</button>
-                <button class="tools-btn" onclick="launch('YouTube Viewer', 'https://safeshare.tv/')">YouTube Viewer(Needs LInk)</button>
+                <button class="tools-btn" onclick="launch('YouTube Viewer', 'https://safeshare.tv/')">YouTube Viewer</button>
             </div>
 
             <div class="column movies-col">
                 <h2 style="color: #e74c3c; margin-bottom: 15px;">Movies</h2>
-                <button class="movie-btn" onclick="window.open('https://Bflixz.org', '_blank')">Bflixz</button>
-                <button class="movie-btn" onclick="window.open('https://pluto.tv/', '_blank')">Pluto TV</button>
-                <button class="movie-btn" onclick="window.open('https://app.plex.tv/desktop/#!/', '_blank')">Plex</button>
-                <button class="movie-btn" onclick="window.open('https://watch.sling.com/dashboard/home', '_blank')">Sling TV</button>
-                <button class="movie-btn" onclick="window.open('https://play.xumo.com/free-movies', '_blank')">Xumo Play</button>
-                <button class="movie-btn" onclick="window.open('https://therokuchannel.roku.com/browse/free-movies-and-tv', '_blank')">The Roku Channel</button>
+                <button class="movie-btn" onclick="launch('Bflixz', 'https://Bflixz.org')">Bflixz</button>
+                <button class="movie-btn" onclick="launch('Pluto TV', 'https://pluto.tv/')">Pluto TV</button>
+                <button class="movie-btn" onclick="launch('Plex', 'https://app.plex.tv/desktop/#!/')">Plex</button>
+                <button class="movie-btn" onclick="launch('Sling TV', 'https://watch.sling.com/dashboard/home')">Sling TV</button>
+                <button class="movie-btn" onclick="launch('Xumo Play', 'https://play.xumo.com/free-movies')">Xumo Play</button>
+                <button class="movie-btn" onclick="launch('Roku Channel', 'https://therokuchannel.roku.com/browse/free-movies-and-tv')">The Roku Channel</button>
             </div>
 
         </div>
     </div>
 
     <script>
+        // Launch function: Overwrites current tab with the viewer and a Back button
         function launch(name, url) {
-            const newTab = window.open('about:blank', '_blank');
-            if (!newTab) return alert('Popup blocked!');
-            const content = `<html><head><title>${name}</title><style>body,html{margin:0;padding:0;height:100%;width:100%;overflow:hidden;background:#000;}iframe{border:none;width:100%;height:100%;}</style></head><body><iframe src="${url}"></iframe></body></html>`;
-            newTab.document.open();
-            newTab.document.write(content);
-            newTab.document.close();
+            const currentURL = window.location.href; // Captures current hub URL to return to
+            const content = `
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>${name}</title>
+                    <style>
+                        body, html { margin: 0; padding: 0; height: 100%; width: 100%; overflow: hidden; background: #000; font-family: sans-serif; }
+                        iframe { border: none; width: 100%; height: 100%; }
+                        .back-btn {
+                            position: fixed; top: 15px; left: 15px;
+                            padding: 8px 16px; background: rgba(0, 0, 0, 0.6);
+                            color: white; border: 1px solid rgba(255, 255, 255, 0.3);
+                            border-radius: 20px; cursor: pointer; z-index: 99999;
+                            font-weight: bold; text-decoration: none; backdrop-filter: blur(5px);
+                            font-size: 13px; transition: 0.2s;
+                        }
+                        .back-btn:hover { background: #fff; color: #000; }
+                    </style>
+                </head>
+                <body>
+                    <a href="${currentURL}" class="back-btn">← </a>
+                    <iframe src="${url}"></iframe>
+                    <script>
+                        // Panic Key: Press Q to go to Classroom
+                        window.addEventListener('keydown', function(e) {
+                            if (e.key.toLowerCase() === 'q') window.location.replace('https://classroom.google.com');
+                        });
+                    <\/script>
+                </body>
+                </html>`;
+            
+            document.open();
+            document.write(content);
+            document.close();
         }
+
+        // Panic Key for the main menu page
+        window.addEventListener('keydown', function(e) {
+            if (e.key.toLowerCase() === 'q') window.location.href = 'https://classroom.google.com';
+        });
     </script>
 </body>
 </html>
